@@ -1,0 +1,13 @@
+SendTransactionResponse:
+  type: object
+  properties:
+    message:
+      type: string
+      example: Success
+    token_address:
+      type: string
+      example: "0x"
+    token_amount:
+      type: string
+      example: "10.15"
+      

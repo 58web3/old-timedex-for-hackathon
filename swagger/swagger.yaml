@@ -1,0 +1,1470 @@
+openapi: 3.0.3
+info:
+  title: timedex REST API definition
+  description: REST API
+  version: 1.0.0
+servers:
+  - url: http://localhost:50001
+    description: API Mock
+paths:
+  /v1/auth/generate-nonce:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Authentication
+      summary: Generate nonce
+      operationId: generateNonce
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthNonceRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthNonceResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBadRequest'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+  /v1/auth/login:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Authentication
+      summary: Verify signature and return JWT
+      operationId: verifySignature
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBadRequest'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+  /v1/wallet/{wallet_address}/user_id:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Wallet
+      summary: Get User ID by wallet_address
+      operationId: getUserIdByWalletAddress
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+        - name: wallet_address
+          in: path
+          description: Wallet Address
+          required: true
+          schema:
+            type: string
+          example: '0x60f80121c31a0d46b5279700f9df786054aa5ee6'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletUser'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+  /v1/user:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - User
+      summary: Create new user
+      operationId: addUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              nickname: Yamata tarou
+              email: yamata@web3-team.com
+              wallet_address: '0x60f80121c31a0d46b5279700f9df786054aa5ee6'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+              example:
+                message: Success
+                id_info:
+                  key: user_id
+                  value: 9490ebf5-e378-4074-97d0-3ce5004ae918
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBadRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseForbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseNotFound'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseConflict'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+  /v1/user/{user_id}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - User
+      summary: Get user info
+      operationId: getUser
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+        - name: user_id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: string
+          example: 9490ebf5-e378-4074-97d0-3ce5004ae918
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseNotFound'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - User
+      summary: Update new user
+      operationId: updateUser
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+        - name: user_id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: string
+          example: 9490ebf5-e378-4074-97d0-3ce5004ae918
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              nickname: Yamata tarou
+              email: yamata@web3-team.com
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+              example:
+                message: Success
+                id_info:
+                  key: user_id
+                  value: 9490ebf5-e378-4074-97d0-3ce5004ae918
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBadRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseForbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseNotFound'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+  /v1/user/{user_id}/delegator:
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - User
+      summary: Update delegator
+      operationId: updateDelegator
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+        - name: user_id
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: string
+          example: 9490ebf5-e378-4074-97d0-3ce5004ae918
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              delegators:
+                - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c81'
+                - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c82'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+              example:
+                message: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBadRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseForbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseNotFound'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+  /v1/team:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Team
+      summary: Get user teams
+      operationId: getUserTeams
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTeamsResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Team
+      summary: Create new team
+      operationId: addTeam
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Team'
+            example:
+              team_name: Web3 Team ABC
+              team_description: About Web3...
+              team_members:
+                - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c81'
+                - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c82'
+                - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c83'
+                - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c84'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTeamResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBadRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseForbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseNotFound'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseConflict'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+  /v1/team/{team_id}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Team
+      summary: Get team by team ID
+      operationId: getTeamByTeamId
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+        - name: team_id
+          in: path
+          description: Team ID
+          required: true
+          schema:
+            type: string
+          example: 9490ebf5-e378-4074-97d0-3ce5004ae918
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Team
+      summary: Update team
+      operationId: updateTeam
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+        - name: team_id
+          in: path
+          description: Team ID
+          required: true
+          schema:
+            type: string
+          example: 9490ebf5-e378-4074-97d0-3ce5004ae918
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Team'
+            example:
+              team_name: Web3 Team ABC
+              team_description: About Web3...
+              team_members:
+                - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c81'
+                - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c82'
+                - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c83'
+                - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c84'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+              example:
+                message: Success
+                team_id: 9490ebf5-e378-4074-97d0-3ce5004ae918
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBadRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseForbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseNotFound'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseConflict'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+  /v1/calendar:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Calendar
+      summary: A a multi booking from other calendar
+      operationId: addBookingFromOtherCalendar
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Calendar'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+              example:
+                message: Success
+                calendar_id: 9590ebf5-e378-4074-97d0-3ce5004ae928
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBadRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseForbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseNotFound'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Calendar
+      summary: Get all or only relevant
+      operationId: getCalendars
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+        - name: team_id
+          in: query
+          description: Team ID
+          schema:
+            type: string
+          example: 9490ebf5-e378-4074-97d0-3ce5004ae918
+        - name: wallet_address
+          in: query
+          description: Wallet address
+          required: true
+          schema:
+            type: string
+          example: '0x60f80121c31a0d46b5279700f9df786054aa5ee6'
+        - name: count
+          in: query
+          description: Limit
+          required: false
+          schema:
+            type: number
+          example: 10
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: number
+          example: 0
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalendarListResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+  /v1/calendar/{calendar_id}/booking:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Calendar
+      summary: A a new calendar booking
+      operationId: addBooking
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+        - name: calendar_id
+          in: path
+          description: Calendar ID
+          required: true
+          schema:
+            type: string
+          example: 9590ebf5-e378-4074-97d0-3ce5004ae928
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Booking'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+              example:
+                message: Success
+                booking_id: 20230310T101213
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBadRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseForbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseNotFound'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseConflict'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+  /v1/calendar/{calendar_id}/booking/{booking_id}:
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Calendar
+      summary: A a new calendar booking
+      operationId: updateBooking
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+        - name: calendar_id
+          in: path
+          description: Calendar ID
+          required: true
+          schema:
+            type: string
+          example: 9590ebf5-e378-4074-97d0-3ce5004ae928
+        - name: booking_id
+          in: path
+          description: Booking ID
+          required: true
+          schema:
+            type: string
+          example: '2023021012131412345'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Booking'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+              example:
+                message: Success
+                booking_id: '2023021012131412345'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBadRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseForbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseNotFound'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseConflict'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - Calendar
+      summary: A a new calendar booking
+      operationId: deleteBooking
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+        - name: calendar_id
+          in: path
+          description: Calendar ID
+          required: true
+          schema:
+            type: string
+          example: 9590ebf5-e378-4074-97d0-3ce5004ae928
+        - name: booking_id
+          in: path
+          description: Booking ID
+          required: true
+          schema:
+            type: string
+          example: '2023021012131412345'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+              example:
+                message: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBadRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseForbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseNotFound'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseConflict'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+  /v1/calendar/{calendar_id}/publish:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Calendar
+      summary: Publish calendar to Teams
+      operationId: publishCalendar
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+        - name: calendar_id
+          in: path
+          description: Calendar ID
+          required: true
+          schema:
+            type: string
+          example: 9590ebf5-e378-4074-97d0-3ce5004ae928
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublishResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBadRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseForbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseNotFound'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseConflict'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+  /v1/send/transaction:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction
+      summary: Execute transaction
+      operationId: sendTransaction
+      parameters:
+        - name: Authorization
+          in: header
+          description: JWT
+          required: true
+          schema:
+            type: string
+          example: Bearer xxx
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendTransactionRequest'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendTransactionResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseBadRequest'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUnauthorized'
+        '500':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseInternalServerError'
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: Credentials or access token for API
+  schemas:
+    AuthNonceRequest:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+          example: '0x328973ce1433d7593191271f75a428af55c6528f'
+    AuthNonceResponse:
+      type: object
+      properties:
+        nonce:
+          type: string
+          example: abcdef
+        created_at:
+          type: number
+          example: 1677498728065
+    Booking:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Join A meeting
+        start:
+          type: string
+          example: 20190412T120000Z
+        end:
+          type: string
+          example: 20190412T140000Z
+        priority:
+          type: string
+          example: Not/Low priority/Middle priority/High priority/Fixed
+        attendees:
+          type: array
+          items:
+            type: string
+          example:
+            - user-a@web3-team.com
+            - user-b@web3-team.com
+            - user-c@web3-team.com
+        summary:
+          type: string
+          example: Start at 12:00
+    BookingDetail:
+      type: object
+      properties:
+        booking_id:
+          type: string
+          example: 20230310T121012
+        title:
+          type: string
+          example: Join A meeting
+        priority:
+          type: string
+          example: Not/Low priority/Middle priority/High priority/Fixed
+        ics_content:
+          type: string
+          example: BEGIN:VCALENDAR...
+    Calendar:
+      type: object
+      properties:
+        google_calendars:
+          type: array
+          items:
+            $ref: '#/components/schemas/GoogleCalendarSetting'
+          example:
+            - email: useraaa@gmail.com
+              access_token: abcd1234...
+        outlook_calendars:
+          type: array
+          items:
+            type: string
+          example:
+            - useraaa@outlook.com
+        ics_contents:
+          type: array
+          items:
+            type: string
+          example:
+            - BEGIN:VCALENDAR xxx
+            - BEGIN:VCALENDAR yyy
+    CalendarDetail:
+      type: object
+      properties:
+        calendar_id:
+          type: string
+          example: 8a0ba146-7be1-4e57-ab17-f9fcaaba82a8
+        wallet_address:
+          type: string
+          example: '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c81'
+        ics_contests:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingDetail'
+    CalendarListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/CalendarDetail'
+    CommonResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Success
+        id_info:
+          type: object
+          $ref: '#/components/schemas/KeyValue'
+    CreateTeamResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Success
+        team_id:
+          type: string
+          example: 9490ebf5-e378-4074-97d0-3ce5004ae918
+        transaction_data:
+          type: object
+          $ref: '#/components/schemas/OriginTransaction'
+    GoogleCalendarSetting:
+      type: object
+      properties:
+        email:
+          type: string
+          example: useraaa@gmail.com
+        access_token:
+          type: string
+          example: abcdefg...
+    KeyValue:
+      type: object
+      properties:
+        key:
+          type: string
+          example: user_id
+        value:
+          type: string
+          example: 2490ebf5-e378-4074-97d0-3ce5004ae9cg
+    OriginTransaction:
+      type: object
+      properties:
+        data:
+          type: string
+          example: 0x...
+        from:
+          type: string
+          example: 0x123...
+        to:
+          type: string
+          example: 0x456...
+        gasLimit:
+          type: number
+          example: 400000
+        gasPrice:
+          type: number
+          example: 210000
+    PublishRequest:
+      type: object
+      properties:
+        team_ids:
+          type: array
+          items:
+            type: string
+          example:
+            - 9490ebf5-e378-4074-97d0-3ce5004ae918
+            - 2490ebf5-e378-4074-97d0-3ce5004ae919
+    PublishResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Success
+        transaction_data:
+          type: object
+          $ref: '#/components/schemas/OriginTransaction'
+    ResponseBadRequest:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Bad Request
+    ResponseConflict:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Conflict
+    ResponseForbidden:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Forbidden
+    ResponseInternalServerError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Service Unavailable
+    ResponseNotFound:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Not Found
+    ResponseUnauthorized:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Unauthorized
+    SendTransactionRequest:
+      type: object
+      properties:
+        raw_transaction:
+          type: string
+          example: 0x001122...
+        type:
+          type: string
+          example: Publish/CreateTeam/...
+    SendTransactionResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Success
+        token_address:
+          type: string
+          example: 0x
+        token_amount:
+          type: string
+          example: '10.15'
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Success
+    Team:
+      type: object
+      properties:
+        team_id:
+          type: string
+          example: 9490ebf5-e378-4074-97d0-3ce5004ae918
+        team_name:
+          type: string
+          example: Web3 Team ABC
+        team_description:
+          type: string
+          example: About Web3...
+        team_members:
+          type: array
+          items:
+            type: string
+          example:
+            - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c81'
+            - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c82'
+            - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c83'
+            - '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c84'
+        created_at:
+          type: number
+          example: 1655562492284
+        created_by:
+          type: string
+          example: 2490ebf5-e378-4074-97d0-3ce5004ae9cf
+        updated_at:
+          type: number
+          example: 1655562492284
+        updated_by:
+          type: string
+          example: 2490ebf5-e378-4074-97d0-3ce5004ae9cf
+        delete_flg:
+          type: boolean
+          example: false
+    TeamDetail:
+      type: object
+      properties:
+        team_id:
+          type: string
+          example: 9490ebf5-e378-4074-97d0-3ce5004ae918
+        team_name:
+          type: string
+          example: Web3 Team ABC
+        team_description:
+          type: string
+          example: About Web3...
+        team_members:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamMember'
+        created_at:
+          type: number
+          example: 1655562492284
+        created_by:
+          type: string
+          example: 2490ebf5-e378-4074-97d0-3ce5004ae9cf
+        updated_at:
+          type: number
+          example: 1655562492284
+        updated_by:
+          type: string
+          example: 2490ebf5-e378-4074-97d0-3ce5004ae9cf
+        delete_flg:
+          type: boolean
+          example: false
+    TeamMember:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+          example: '0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c81'
+        email:
+          type: string
+          example: useraaa@gmail.com
+        status:
+          type: string
+          example: Accepted
+        invite_expired_at:
+          type: number
+          example: 1678627272290
+    User:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: 9490ebf5-e378-4074-97d0-3ce5004ae918
+        nickname:
+          type: string
+          example: Yamata tarou
+        email:
+          type: string
+          example: user@web3-team.com
+        teams_ids:
+          type: array
+          items:
+            type: string
+          example:
+            - 9490ebf5-e378-4074-97d0-3ce5004ae918
+            - 2490ebf5-e378-4074-97d0-3ce5004ae919
+        created_at:
+          type: number
+          example: 1655562492284
+        created_by:
+          type: string
+          example: 2490ebf5-e378-4074-97d0-3ce5004ae9cf
+        updated_at:
+          type: number
+          example: 1655562492284
+        updated_by:
+          type: string
+          example: 2490ebf5-e378-4074-97d0-3ce5004ae9cf
+        delete_flg:
+          type: boolean
+          example: false
+    UserTeamsResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Success
+        user_teams:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/TeamDetail'
+    VerifyRequest:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+          example: '0x328973ce1433d7593191271f75a428af55c6528f'
+        signature:
+          type: string
+          example: xxx
+    VerifyResponse:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: 9490ebf5-e378-4074-97d0-3ce5004ae918
+        jwt:
+          type: string
+          example: xxx
+    Wallet:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+          example: '0x67dF41d7Df0b07EcC985D87E093D48bbbab68E74'
+        wallet_public_key:
+          type: string
+          example: 035143318b83eb5d31611f8c03582ab1200494f66f5e11a67c34f5581f48c1b70b
+    WalletUser:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: 9490ebf5-e378-4074-97d0-3ce5004ae918

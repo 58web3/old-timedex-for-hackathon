@@ -1,0 +1,11 @@
+GoogleCalendarSetting: 
+  type: object
+  properties:
+    email:
+      type: string
+      example: "useraaa@gmail.com"
+    access_token:
+      type: string
+      example: "abcdefg..."
+    
+

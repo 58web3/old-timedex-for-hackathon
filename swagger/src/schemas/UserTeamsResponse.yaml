@@ -1,0 +1,11 @@
+UserTeamsResponse:
+  type: object
+  properties:
+    message:
+      type: string
+      example: "Success"
+    user_teams:
+      type: array
+      items:
+        type: object
+        $ref: '#/components/schemas/TeamDetail'

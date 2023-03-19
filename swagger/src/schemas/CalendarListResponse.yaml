@@ -1,0 +1,4 @@
+CalendarListResponse:
+  type: array
+  items: 
+    $ref: '#/components/schemas/CalendarDetail'

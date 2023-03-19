@@ -1,0 +1,1 @@
+openapi-generator generate -i ../swagger/swagger.yaml -g dart -o ./client/

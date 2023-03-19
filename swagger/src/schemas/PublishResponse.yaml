@@ -1,0 +1,10 @@
+PublishResponse:
+  type: object
+  properties:
+    message:
+      type: string
+      example: Success
+    transaction_data: 
+      type: object
+      $ref: '#/components/schemas/OriginTransaction'
+

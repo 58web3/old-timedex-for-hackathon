@@ -1,0 +1,10 @@
+AuthNonceResponse:
+  type: object
+  properties:
+    nonce:
+      type: string
+      example: "abcdef"
+    created_at: 
+      type: number
+      example: 1677498728065
+

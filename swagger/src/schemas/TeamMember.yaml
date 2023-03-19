@@ -1,0 +1,15 @@
+TeamMember:
+  type: object
+  properties:
+    wallet_address:
+      type: string
+      example: "0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c81"
+    email:
+      type: string
+      example: "useraaa@gmail.com"
+    status:
+      type: string
+      example: "Accepted"
+    invite_expired_at:
+      type: number
+      example: 1678627272290

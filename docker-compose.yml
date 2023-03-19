@@ -1,0 +1,59 @@
+version: "3.8"
+services:
+  dynamodb-local:
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    container_name: dynamodb-local
+    image: "amazon/dynamodb-local:latest"
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin
+    ports:
+      - "8001:8001"
+    environment:
+      DYNAMO_ENDPOINT: "http://dynamodb-local:8000"
+      AWS_REGION: "us-west-2"
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+    depends_on:
+      - dynamodb-local
+  timedex-api:
+    build:
+      context: ./api
+      dockerfile: ./Dockerfile
+    image: timedex/api
+    container_name: api
+    tty: true
+    environment:
+      - NODE_ENV=development
+    ports:
+      - 8888:8888
+  timedex-frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    volumes:
+      # Flutter files
+      - ../.dart_tool:/workspace/.dart_tool:cached
+      - ../.fvm:/workspace/.fvm:cached
+      - ../android:/workspace/android:cached
+      - ../ios:/workspace/ios:cached
+      - ../lib:/workspace/lib:cached
+      - ../linux:/workspace/linux:cached
+      - ../macos:/workspace/macos:cached
+      - ../test:/workspace/test:cached
+      - ../web:/workspace/web:cached
+      - ../windows:/workspace/windows:cached
+      - ../.metadata:/workspace/.metadata:cached
+      - ../.packages:/workspace/.packages:cached
+      - ../analysis_options.yaml:/workspace/analysis_options.yaml:cached
+      - ../<project_name>.iml:/workspace/<project_name>.iml:cached
+      - ../pubspec.lock:/workspace/pubspec.lock:cached
+      - ../pubspec.yaml:/workspace/pubspec.yaml:cached
+      - ../README.md:/workspace/README.md:cached
+      # VSCode settings
+      - ../.vscode:/workspace/.vscode:cached
+    command: /bin/sh -c "while sleep 1000; do :; done"

@@ -1,0 +1,18 @@
+OriginTransaction:
+  type: object
+  properties:
+    data: 
+      type: string
+      example: "0x..."
+    from: 
+      type: string
+      example: "0x123..."
+    to: 
+      type: string
+      example: "0x456..."
+    gasLimit: 
+      type: number
+      example: 400000
+    gasPrice: 
+      type: number
+      example: 210000

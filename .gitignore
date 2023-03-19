@@ -1,0 +1,45 @@
+.DS_Store
+node_modules
+/dist
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+frontend/dao_schedule/.fvm/flutter_sdk
+swagger/yarn.lock
+api/yarn.lock
+api/package-lock.json
+api/credentials.json
+smartcontract/yarn.lock
+frontend/pubspec.lock
+
+# 自動生成ファイル群
+api/.node-version
+api/package.json
+docker/dynamodb/shared-local-instance.db
+docker/localstack/cache/machine.json
+docker/localstack/cache/server.test.pem
+docker/localstack/cache/server.test.pem.crt
+docker/localstack/cache/server.test.pem.key
+docker/localstack/cache/service-catalog-1_4_1_dev-1_29_94.pickle
+docker/localstack/logs/localstack_infra.err
+docker/localstack/logs/localstack_infra.log
+docker
+api/mycalendar.ics
+api/metadata.json
+smartcontract/.openzeppelin

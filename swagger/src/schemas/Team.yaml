@@ -1,0 +1,34 @@
+Team:
+  type: object
+  properties:
+    team_id:
+      type: string
+      example: "9490ebf5-e378-4074-97d0-3ce5004ae918"
+    team_name:
+      type: string
+      example: 'Web3 Team ABC'
+    team_description:
+      type: string
+      example: "About Web3..."
+    team_members:
+      type: array
+      items:
+        type: string
+      example: ["0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c81","0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c82","0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c83","0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c84"]
+    created_at:
+      type: number
+      example: 1655562492284
+    created_by:
+      type: string
+      example: "2490ebf5-e378-4074-97d0-3ce5004ae9cf"
+    updated_at:
+      type: number
+      example: 1655562492284
+    updated_by:
+      type: string
+      example: "2490ebf5-e378-4074-97d0-3ce5004ae9cf"
+    delete_flg:
+      type: boolean
+      example: false
+
+

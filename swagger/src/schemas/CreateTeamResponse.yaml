@@ -1,0 +1,12 @@
+CreateTeamResponse: 
+  type: object
+  properties:
+    message:
+      type: string
+      example: "Success"
+    team_id:
+      type: string
+      example: "9490ebf5-e378-4074-97d0-3ce5004ae918"
+    transaction_data: 
+      type: object
+      $ref: '#/components/schemas/OriginTransaction'

@@ -1,0 +1,17 @@
+BookingDetail:
+  type: object
+  properties:
+    booking_id:
+      type: string
+      example: "20230310T121012"
+    title: 
+      type: string
+      example: "Join A meeting"
+    priority:
+      type: string
+      example: "Not/Low priority/Middle priority/High priority/Fixed"
+    ics_content:
+      type: string
+      example: "BEGIN:VCALENDAR..."
+      
+      

@@ -1,0 +1,6 @@
+AuthNonceRequest:
+  type: object
+  properties:
+    wallet_address:
+      type: string
+      example: "0x328973ce1433d7593191271f75a428af55c6528f"

@@ -1,0 +1,10 @@
+SendTransactionRequest:
+  type: object
+  properties:
+    raw_transaction:
+      type: string
+      example: "0x001122..."
+    type:
+      type: string
+      example: "Publish/CreateTeam/..."
+      

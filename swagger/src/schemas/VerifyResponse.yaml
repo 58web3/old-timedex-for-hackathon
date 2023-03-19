@@ -1,0 +1,10 @@
+VerifyResponse:
+  type: object
+  properties:
+    user_id:
+      type: string
+      example: "9490ebf5-e378-4074-97d0-3ce5004ae918"
+    jwt:
+      type: string
+      example: "xxx"
+    

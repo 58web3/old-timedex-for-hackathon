@@ -1,0 +1,33 @@
+TeamDetail:
+  type: object
+  properties:
+    team_id:
+      type: string
+      example: "9490ebf5-e378-4074-97d0-3ce5004ae918"
+    team_name:
+      type: string
+      example: 'Web3 Team ABC'
+    team_description:
+      type: string
+      example: "About Web3..."
+    team_members:
+      type: array
+      items:
+        $ref: '#/components/schemas/TeamMember'
+    created_at:
+      type: number
+      example: 1655562492284
+    created_by:
+      type: string
+      example: "2490ebf5-e378-4074-97d0-3ce5004ae9cf"
+    updated_at:
+      type: number
+      example: 1655562492284
+    updated_by:
+      type: string
+      example: "2490ebf5-e378-4074-97d0-3ce5004ae9cf"
+    delete_flg:
+      type: boolean
+      example: false
+
+

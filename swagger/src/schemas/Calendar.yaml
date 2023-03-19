@@ -1,0 +1,25 @@
+Calendar: 
+  type: object
+  properties:
+    google_calendars:
+      type: array
+      items:
+        $ref: '#/components/schemas/GoogleCalendarSetting'
+      example: [
+          {
+            "email": "useraaa@gmail.com",
+            "access_token": "abcd1234..."
+          }
+        ]
+    outlook_calendars:
+      type: array
+      items:
+        type: string
+      example: ["useraaa@outlook.com"]
+    ics_contents: 
+      type: array
+      items:
+        type: string
+      example: ["BEGIN:VCALENDAR xxx", "BEGIN:VCALENDAR yyy"]
+    
+

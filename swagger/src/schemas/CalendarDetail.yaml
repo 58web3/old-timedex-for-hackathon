@@ -1,0 +1,14 @@
+CalendarDetail: 
+  type: object
+  properties:
+    calendar_id:
+      type: string
+      example: "8a0ba146-7be1-4e57-ab17-f9fcaaba82a8"
+    wallet_address:
+      type: string
+      example: "0x228d01ABE7ca1E24A2d4fE33F633712eE59e6c81"
+    ics_contests:
+      type: array
+      items:
+        $ref: '#/components/schemas/BookingDetail'
+
